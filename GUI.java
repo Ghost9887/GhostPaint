@@ -9,6 +9,7 @@ public class GUI {
 
   private JFrame mainFrame;
   private PaintPanel mainPanel;
+  private JPanel navPanel;
 
   // mouse Pos
   private Point mousePos = new Point(0, 0);
@@ -16,20 +17,32 @@ public class GUI {
   public void createFrame() {
 
     mainFrame = new JFrame();
+    mainFrame.setLayout(new BorderLayout());
+
     mainPanel = new PaintPanel();
     mainPanel.setLayout(new BorderLayout());
-    JLabel label = new JLabel();
 
-    label.setHorizontalAlignment(JLabel.LEFT);
-    label.setVerticalAlignment(JLabel.TOP);
+    navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    navPanel.setBackground(Color.GRAY);
+
+    JButton homeButton = new JButton("Home");
+    JButton fileButton = new JButton("File");
+    JButton helpButton = new JButton("Help");
+    navPanel.add(homeButton);
+    navPanel.add(fileButton);
+    navPanel.add(helpButton);
+
+    JLabel label = new JLabel("Welcome!");
     label.setFont(new Font(label.getFont().getName(), label.getFont().getStyle(), 20));
+    mainPanel.add(label, BorderLayout.NORTH);
 
-    mainFrame.add(mainPanel);
-    mainPanel.add(label);
-    mainFrame.setVisible(true);
+    mainFrame.add(navPanel, BorderLayout.NORTH);
+    mainFrame.add(mainPanel, BorderLayout.CENTER);
+
     mainFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     mainFrame.setLocationRelativeTo(null);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    mainFrame.setVisible(true);
 
     draw(label);
   }
