@@ -4,14 +4,12 @@ import java.util.ArrayList;
 
 public class PaintPanel extends JPanel {
 
-  private Point pos = new Point(0, 0);
-
   private ArrayList<Point> positions = new ArrayList<>();
 
-  public void setPos(int x, int y) {
-    this.pos.x = x;
-    this.pos.y = y;
-    positions.add(new Point(pos)); // have to create a new Point object
+  public void addPos(ArrayList<Point> newPos) {
+    for (int i = 0; i < newPos.size(); i++) {
+      positions.add(new Point(newPos.get(i)));
+    }
     repaint(); // calls the paintComponent
   }
 
