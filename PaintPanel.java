@@ -19,7 +19,7 @@ public class PaintPanel extends JPanel {
     super.paintComponent(g); // clears the panel
     g.setColor(Color.BLUE);
     for (int i = 0; i < positions.size(); i++) {
-      g.fillOval(positions.get(i).x, positions.get(i).y, 20, 20);
+      g.fillOval(positions.get(i).x - 10, positions.get(i).y - 10, 20, 20);
     }
   }
 }
