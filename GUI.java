@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicSliderUI.ActionScroller;
+
 import java.awt.*;
 import java.awt.datatransfer.FlavorEvent;
 import java.awt.event.*;
@@ -17,10 +19,17 @@ public class GUI {
   private JPanel navPanel;
   private JPanel toolPanel;
 
-  // mouse Pos
-  private Point mousePos = new Point(0, 0);
+  // BUTTONS
+  private JButton homeButton = new JButton("Home");
+  private JButton fileButton = new JButton("File");
+  private JButton helpButton = new JButton("Help");
+  private JButton rectButton = new JButton("Rectangle");
+  private JButton circleButton = new JButton("Circle");
+  private JButton selectColour = new JButton("Select Colour");
 
-  // action
+  private Point mousePos = new Point(0, 0);
+  private ShapeEnum currentShape = ShapeEnum.CIRCLE;
+
   public void createFrame() {
 
     mainFrame = new JFrame();
@@ -32,9 +41,6 @@ public class GUI {
     navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     navPanel.setBackground(Color.GRAY);
 
-    JButton homeButton = new JButton("Home");
-    JButton fileButton = new JButton("File");
-    JButton helpButton = new JButton("Help");
     navPanel.add(homeButton);
     navPanel.add(fileButton);
     navPanel.add(helpButton);
@@ -50,13 +56,15 @@ public class GUI {
     toolPanel.setBackground(Color.GRAY);
 
     // --shapes selector
+
+    // default shape
+    circleButton.setEnabled(false);
+
     JLabel shapes = new JLabel("Shapes");
     toolPanel.add(shapes);
 
     JPanel shapeSelectorPanel = new JPanel(new GridLayout(2, 2));
     shapeSelectorPanel.setOpaque(false); // use the gray background
-    JButton rectButton = new JButton("Rectangle");
-    JButton circleButton = new JButton("Circle");
     shapeSelectorPanel.add(rectButton);
     shapeSelectorPanel.add(circleButton);
     toolPanel.add(shapeSelectorPanel);
@@ -67,7 +75,6 @@ public class GUI {
 
     JPanel colourPanel = new JPanel(new GridLayout(10, 2));
     colourPanel.setOpaque(false);
-    JButton selectColour = new JButton("Select Colour");
     colourPanel.add(selectColour);
     toolPanel.add(colourPanel);
     // END <-
@@ -81,10 +88,17 @@ public class GUI {
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.setVisible(true);
 
+    // kicks off the events
     draw(label);
   }
 
   private void draw(JLabel label) {
+    checkMouseInputs(label);
+    checkButtonInputs();
+  }
+
+  // TODO: maybe move actions to a seperate class
+  private void checkMouseInputs(JLabel label) {
     // when clicked (ONLY PAINTS THE ONE LOCATION)
     mainPanel.addMouseListener(new MouseAdapter() {
       @Override
@@ -92,7 +106,7 @@ public class GUI {
         context.setAction(Action.PAINT);
         context.setPos(mousePos);
         context.setSize(new Point(10, 10));
-        context.setShape(ShapeEnum.CIRCLE);
+        context.setShape(currentShape);
         mainPanel.paint();
       }
     });
@@ -104,7 +118,7 @@ public class GUI {
         label.setText("X: " + mousePos.x + " | Y: " + mousePos.y);
         context.setPos(mousePos);
         context.setSize(new Point(10, 10));
-        context.setShape(ShapeEnum.CIRCLE);
+        context.setShape(currentShape);
         mainPanel.paint();
       }
 
@@ -115,7 +129,27 @@ public class GUI {
         label.setText("X: " + mousePos.x + " | Y: " + mousePos.y);
         context.setAction(Action.DEFAULT);
         context.setPos(mousePos);
+        context.setShape(currentShape);
         mainPanel.cursor();
+      }
+    });
+  }
+
+  private void checkButtonInputs() {
+    rectButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        currentShape = ShapeEnum.RECTANGLE;
+        rectButton.setEnabled(false);
+        circleButton.setEnabled(true);
+      }
+    });
+    circleButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        currentShape = ShapeEnum.CIRCLE;
+        circleButton.setEnabled(false);
+        rectButton.setEnabled(true);
       }
     });
   }

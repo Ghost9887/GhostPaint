@@ -34,11 +34,19 @@ public class PaintPanel extends JPanel {
     super.paintComponent(g); // clear the screen
     g.setColor(Color.BLACK);
     if (context.getAction() == Action.DEFAULT) {
-      g.drawOval(
-          context.getPos().x - context.getSize().x / 2,
-          context.getPos().y - context.getSize().y / 2,
-          context.getSize().x,
-          context.getSize().y);
+      if (context.getShape() == ShapeEnum.CIRCLE) {
+        g.drawOval(
+            context.getPos().x - context.getSize().x / 2,
+            context.getPos().y - context.getSize().y / 2,
+            context.getSize().x,
+            context.getSize().y);
+      } else if (context.getShape() == ShapeEnum.RECTANGLE) {
+        g.drawRect(
+            context.getPos().x - context.getSize().x / 2,
+            context.getPos().y - context.getSize().y / 2,
+            context.getSize().x,
+            context.getSize().y);
+      }
     }
     if (!shapes.empty()) {
       for (Shape shape : shapes) {
