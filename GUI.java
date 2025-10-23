@@ -37,6 +37,7 @@ public class GUI {
     mainFrame.setLayout(new BorderLayout());
     mainPanel = new PaintPanel(context);
     mainPanel.setLayout(new BorderLayout());
+    mainPanel.setBackground(Color.WHITE);
 
     // NAV PANEL->
     navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -78,10 +79,15 @@ public class GUI {
 
     JPanel colourPanel = new JPanel(new GridLayout(3, 2));
     colourPanel.setOpaque(false);
+    blueButton.setBackground(Color.BLUE);
     colourPanel.add(blueButton);
+    redButton.setBackground(Color.RED);
     colourPanel.add(redButton);
+    greenButton.setBackground(Color.GREEN);
     colourPanel.add(greenButton);
+    whiteButton.setBackground(Color.WHITE);
     colourPanel.add(whiteButton);
+    blackButton.setBackground(Color.BLACK);
     colourPanel.add(blackButton);
     toolPanel.add(colourPanel);
 
