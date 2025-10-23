@@ -3,15 +3,15 @@ import java.awt.*;
 public class Shape {
 
   private Point pos;
-
   private Point size;
-
   private ShapeEnum id;
+  private Color colour;
 
-  public Shape(Point pos, Point size, ShapeEnum id) {
+  public Shape(Point pos, Point size, ShapeEnum id, Color colour) {
     this.pos = pos;
     this.size = size;
     this.id = id;
+    this.colour = colour;
   }
 
   // getters
@@ -25,6 +25,10 @@ public class Shape {
 
   public ShapeEnum getId() {
     return id;
+  }
+
+  public Color getColour() {
+    return colour;
   }
 
 }

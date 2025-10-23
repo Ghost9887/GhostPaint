@@ -25,7 +25,11 @@ public class GUI {
   private JButton helpButton = new JButton("Help");
   private JButton rectButton = new JButton("Rectangle");
   private JButton circleButton = new JButton("Circle");
-  private JButton selectColour = new JButton("Select Colour");
+  private JButton blueButton = new JButton("Blue");
+  private JButton redButton = new JButton("Red");
+  private JButton greenButton = new JButton("Green");
+  private JButton whiteButton = new JButton("White");
+  private JButton blackButton = new JButton("Black");
 
   private Point mousePos = new Point(0, 0);
   private ShapeEnum currentShape = ShapeEnum.CIRCLE;
@@ -70,12 +74,20 @@ public class GUI {
     toolPanel.add(shapeSelectorPanel);
 
     // --colours
+
+    // default colour
+    blackButton.setEnabled(false);
+
     JLabel colours = new JLabel("Colours");
     toolPanel.add(colours);
 
-    JPanel colourPanel = new JPanel(new GridLayout(10, 2));
+    JPanel colourPanel = new JPanel(new GridLayout(3, 2));
     colourPanel.setOpaque(false);
-    colourPanel.add(selectColour);
+    colourPanel.add(blueButton);
+    colourPanel.add(redButton);
+    colourPanel.add(greenButton);
+    colourPanel.add(whiteButton);
+    colourPanel.add(blackButton);
     toolPanel.add(colourPanel);
     // END <-
 
@@ -135,6 +147,7 @@ public class GUI {
     });
   }
 
+  // TODO: change into arrays
   private void checkButtonInputs() {
     rectButton.addActionListener(new ActionListener() {
       @Override
@@ -150,6 +163,60 @@ public class GUI {
         currentShape = ShapeEnum.CIRCLE;
         circleButton.setEnabled(false);
         rectButton.setEnabled(true);
+      }
+    });
+    blueButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        context.setColour(Color.BLUE);
+        blueButton.setEnabled(false);
+        redButton.setEnabled(true);
+        greenButton.setEnabled(true);
+        whiteButton.setEnabled(true);
+      }
+    });
+    redButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        context.setColour(Color.RED);
+        redButton.setEnabled(false);
+        blueButton.setEnabled(true);
+        greenButton.setEnabled(true);
+        whiteButton.setEnabled(true);
+        blackButton.setEnabled(true);
+      }
+    });
+    greenButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        context.setColour(Color.GREEN);
+        greenButton.setEnabled(false);
+        blueButton.setEnabled(true);
+        redButton.setEnabled(true);
+        whiteButton.setEnabled(true);
+        blackButton.setEnabled(true);
+      }
+    });
+    whiteButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        context.setColour(Color.WHITE);
+        whiteButton.setEnabled(false);
+        blueButton.setEnabled(true);
+        redButton.setEnabled(true);
+        greenButton.setEnabled(true);
+        blackButton.setEnabled(true);
+      }
+    });
+    blackButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        context.setColour(Color.BLACK);
+        blackButton.setEnabled(false);
+        blueButton.setEnabled(true);
+        redButton.setEnabled(true);
+        greenButton.setEnabled(true);
+        whiteButton.setEnabled(true);
       }
     });
   }

@@ -19,7 +19,8 @@ public class PaintPanel extends JPanel {
     Shape newShape = new Shape(
         context.getPos(),
         context.getSize(),
-        context.getShape());
+        context.getShape(),
+        context.getColour());
     shapes.push(newShape);
     repaint();
   }
@@ -32,7 +33,6 @@ public class PaintPanel extends JPanel {
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g); // clear the screen
-    g.setColor(Color.BLACK);
     if (context.getAction() == Action.DEFAULT) {
       if (context.getShape() == ShapeEnum.CIRCLE) {
         g.drawOval(
@@ -50,7 +50,7 @@ public class PaintPanel extends JPanel {
     }
     if (!shapes.empty()) {
       for (Shape shape : shapes) {
-
+        g.setColor(shape.getColour());
         if (shape.getId() == ShapeEnum.CIRCLE) {
           g.fillOval(shape.getPos().x, shape.getPos().y,
               shape.getSize().x, shape.getSize().y);

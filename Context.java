@@ -6,6 +6,7 @@ public class Context {
   private Point pos = new Point(0, 0);
   private Action action = Action.DEFAULT;
   private ShapeEnum shape = ShapeEnum.EMPTY;
+  private Color colour = Color.BLACK;
 
   public void setPos(Point pos) {
     this.pos = pos;
@@ -23,6 +24,10 @@ public class Context {
     this.action = action;
   }
 
+  public void setColour(Color colour) {
+    this.colour = colour;
+  }
+
   public Point getPos() {
     return pos;
   }
@@ -37,6 +42,10 @@ public class Context {
 
   public ShapeEnum getShape() {
     return shape;
+  }
+
+  public Color getColour() {
+    return colour;
   }
 
 }
