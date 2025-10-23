@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 public class GUI {
 
+  private final Context context = new Context();
+
   private final int SCREEN_WIDTH = 1200;
   private final int SCREEN_HEIGHT = 800;
 
@@ -16,12 +18,13 @@ public class GUI {
   private Point mousePos = new Point(0, 0);
   private Point newMousePos = new Point(0, 0);
 
+  // action
   public void createFrame() {
 
     mainFrame = new JFrame();
     mainFrame.setLayout(new BorderLayout());
 
-    mainPanel = new PaintPanel();
+    mainPanel = new PaintPanel(context);
     mainPanel.setLayout(new BorderLayout());
 
     navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -34,9 +37,9 @@ public class GUI {
     navPanel.add(fileButton);
     navPanel.add(helpButton);
 
-    JLabel label = new JLabel("Welcome!");
+    JLabel label = new JLabel("");
     label.setFont(new Font(label.getFont().getName(), label.getFont().getStyle(), 20));
-    mainPanel.add(label, BorderLayout.NORTH);
+    navPanel.add(label, BorderLayout.NORTH);
 
     mainFrame.add(navPanel, BorderLayout.NORTH);
     mainFrame.add(mainPanel, BorderLayout.CENTER);
@@ -54,17 +57,21 @@ public class GUI {
     mainPanel.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent event) {
-        mainPanel.addPos(getNewPos());
+        context.changeAction(Action.PAINT);
+        mainPanel.addNewPositions(getNewPos());
       }
     });
     mainPanel.addMouseMotionListener(new MouseAdapter() {
       // when pressed (ONLY PAINTS WHEN MOUSE IS MOVED)
       @Override
       public void mouseDragged(MouseEvent event) {
+
         mousePos = newMousePos;
         newMousePos = event.getPoint();
+
         label.setText("X: " + mousePos.x + " | Y: " + mousePos.y);
-        mainPanel.addPos(getNewPos());
+
+        mainPanel.addNewPositions(getNewPos());
       }
 
       // when not pressed
@@ -72,14 +79,17 @@ public class GUI {
       public void mouseMoved(MouseEvent event) {
         mousePos = newMousePos;
         newMousePos = event.getPoint();
+
         label.setText("X: " + mousePos.x + " | Y: " + mousePos.y);
+
+        context.changeAction(Action.DEFAULT);
+        mainPanel.setPos(newMousePos);
       }
     });
   }
 
   public ArrayList<Point> getNewPos() {
     ArrayList<Point> newPositions = new ArrayList<>();
-
     int x = mousePos.x;
     int y = mousePos.y;
     int newX = newMousePos.x;
