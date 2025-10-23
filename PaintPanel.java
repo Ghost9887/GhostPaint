@@ -52,13 +52,19 @@ public class PaintPanel extends JPanel {
       for (Shape shape : shapes) {
         g.setColor(shape.getColour());
         if (shape.getId() == ShapeEnum.CIRCLE) {
-          g.fillOval(shape.getPos().x, shape.getPos().y,
-              shape.getSize().x, shape.getSize().y);
+          g.fillOval(
+              shape.getPos().x - shape.getSize().x / 2,
+              shape.getPos().y - shape.getSize().y / 2,
+              shape.getSize().x,
+              shape.getSize().y);
         }
 
         else if (shape.getId() == ShapeEnum.RECTANGLE) {
-          g.fillRect(shape.getPos().x, shape.getPos().y,
-              shape.getSize().x, shape.getSize().y);
+          g.fillRect(
+              shape.getPos().x - shape.getSize().x / 2,
+              shape.getPos().y - shape.getSize().y / 2,
+              shape.getSize().x,
+              shape.getSize().y);
         }
       }
     }

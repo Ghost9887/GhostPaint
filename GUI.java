@@ -1,11 +1,6 @@
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicSliderUI.ActionScroller;
-
 import java.awt.*;
-import java.awt.datatransfer.FlavorEvent;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.concurrent.Flow;
 
 public class GUI {
 
@@ -30,9 +25,11 @@ public class GUI {
   private JButton greenButton = new JButton("Green");
   private JButton whiteButton = new JButton("White");
   private JButton blackButton = new JButton("Black");
+  private JButton sizeButton = new JButton("Resize");
 
-  private Point mousePos = new Point(0, 0);
-  private ShapeEnum currentShape = ShapeEnum.CIRCLE;
+  // TEXT FIELDS
+  private JTextField sizeX = new JTextField();
+  private JTextField sizeY = new JTextField();
 
   public void createFrame() {
 
@@ -60,7 +57,6 @@ public class GUI {
     toolPanel.setBackground(Color.GRAY);
 
     // --shapes selector
-
     // default shape
     circleButton.setEnabled(false);
 
@@ -74,7 +70,6 @@ public class GUI {
     toolPanel.add(shapeSelectorPanel);
 
     // --colours
-
     // default colour
     blackButton.setEnabled(false);
 
@@ -89,6 +84,23 @@ public class GUI {
     colourPanel.add(whiteButton);
     colourPanel.add(blackButton);
     toolPanel.add(colourPanel);
+
+    // --size
+    JLabel size = new JLabel("Size");
+    toolPanel.add(size);
+
+    JPanel sizePanel = new JPanel(new GridLayout(6, 1));
+    sizeX.setText(String.valueOf(context.getSize().x));
+    JLabel labelX = new JLabel("width: ");
+    sizeY.setText(String.valueOf(context.getSize().y));
+    JLabel labelY = new JLabel("height: ");
+    sizePanel.add(labelX);
+    sizePanel.add(sizeX);
+    sizePanel.add(labelY);
+    sizePanel.add(sizeY);
+    sizePanel.add(sizeButton);
+    toolPanel.add(sizePanel);
+
     // END <-
 
     // MAIN
@@ -116,9 +128,7 @@ public class GUI {
       @Override
       public void mousePressed(MouseEvent event) {
         context.setAction(Action.PAINT);
-        context.setPos(mousePos);
-        context.setSize(new Point(10, 10));
-        context.setShape(currentShape);
+        context.setPos(event.getPoint());
         mainPanel.paint();
       }
     });
@@ -126,33 +136,28 @@ public class GUI {
       // when pressed (ONLY PAINTS WHEN MOUSE IS MOVED)
       @Override
       public void mouseDragged(MouseEvent event) {
-        mousePos = event.getPoint();
-        label.setText("X: " + mousePos.x + " | Y: " + mousePos.y);
-        context.setPos(mousePos);
-        context.setSize(new Point(10, 10));
-        context.setShape(currentShape);
+        context.setPos(event.getPoint());
+        label.setText("X: " + context.getPos().x + " | Y: " + context.getPos().y);
         mainPanel.paint();
       }
 
       // when not pressed
       @Override
       public void mouseMoved(MouseEvent event) {
-        mousePos = event.getPoint();
-        label.setText("X: " + mousePos.x + " | Y: " + mousePos.y);
+        context.setPos(event.getPoint());
+        label.setText("X: " + context.getPos().x + " | Y: " + context.getPos().y);
         context.setAction(Action.DEFAULT);
-        context.setPos(mousePos);
-        context.setShape(currentShape);
-        mainPanel.cursor();
+        mainPanel.cursor(); // just repaints the cursor
       }
     });
   }
 
-  // TODO: change into arrays
+  // TODO: change into array
   private void checkButtonInputs() {
     rectButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
-        currentShape = ShapeEnum.RECTANGLE;
+        context.setShape(ShapeEnum.RECTANGLE);
         rectButton.setEnabled(false);
         circleButton.setEnabled(true);
       }
@@ -160,7 +165,7 @@ public class GUI {
     circleButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
-        currentShape = ShapeEnum.CIRCLE;
+        context.setShape(ShapeEnum.CIRCLE);
         circleButton.setEnabled(false);
         rectButton.setEnabled(true);
       }
@@ -217,6 +222,15 @@ public class GUI {
         redButton.setEnabled(true);
         greenButton.setEnabled(true);
         whiteButton.setEnabled(true);
+      }
+    });
+    sizeButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        context.setSize(new Point(
+            Integer.valueOf(sizeX.getText()),
+            Integer.valueOf(sizeY.getText())));
+        mainPanel.cursor();
       }
     });
   }
