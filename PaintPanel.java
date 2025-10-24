@@ -44,11 +44,14 @@ public class PaintPanel extends JPanel {
         false);
     shapes.push(newShape);
     repaint();
-
   }
 
   public void cursor() {
     repaint();
+  }
+
+  public void clearScreen() {
+    shapes.clear();
   }
 
   // needs to inheret the JPanel class to be able to call this

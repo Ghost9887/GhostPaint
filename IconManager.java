@@ -5,6 +5,7 @@ import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
+//TODO: find a way to include more types not just this enum
 public class IconManager {
   private HashMap<ShapeEnum, ImageIcon> icons;
 

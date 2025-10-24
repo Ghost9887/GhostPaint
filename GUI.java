@@ -34,6 +34,7 @@ public class GUI {
   private Color colourArr[];
   private JButton colourButtons[] = new JButton[AMOUNT_OF_COLOURS];
   private JButton sizeButton = new JButton("Resize");
+  private JButton clearButton = new JButton("Clear Screen");
 
   // TEXT FIELDS
   private JTextField sizeX = new JTextField();
@@ -131,6 +132,13 @@ public class GUI {
     sizePanel.add(sizeButton);
     toolPanel.add(sizePanel);
 
+    // --clear
+
+    JLabel clearLabel = new JLabel("Clear Screen");
+    toolPanel.add(clearLabel);
+    JPanel clearPanel = new JPanel(new GridLayout(1, 1));
+    clearPanel.add(clearButton);
+    toolPanel.add(clearPanel);
     // END <-
 
     // MAIN
@@ -303,6 +311,12 @@ public class GUI {
             Integer.valueOf(sizeX.getText()),
             Integer.valueOf(sizeY.getText())));
         mainPanel.cursor();
+      }
+    });
+    clearButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        mainPanel.clearScreen();
       }
     });
   }
