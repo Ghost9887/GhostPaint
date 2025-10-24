@@ -6,12 +6,14 @@ public class Shape {
   private Point size;
   private ShapeEnum id;
   private Color colour;
+  private boolean fill;
 
-  public Shape(Point pos, Point size, ShapeEnum id, Color colour) {
+  public Shape(Point pos, Point size, ShapeEnum id, Color colour, boolean fill) {
     this.pos = pos;
     this.size = size;
     this.id = id;
     this.colour = colour;
+    this.fill = fill;
   }
 
   // getters
@@ -29,6 +31,10 @@ public class Shape {
 
   public Color getColour() {
     return colour;
+  }
+
+  public boolean getFill() {
+    return fill;
   }
 
 }

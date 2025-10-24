@@ -1,3 +1,3 @@
 public enum Action {
-  DEFAULT, PAINT;
+  DEFAULT, PAINT, DRAW;
 }

@@ -13,16 +13,38 @@ public class PaintPanel extends JPanel {
     this.context = context;
   }
 
-  private ArrayList<Point> positions = new ArrayList<>();
-
   public void paint() {
     Shape newShape = new Shape(
         context.getPos(),
         context.getSize(),
         context.getShape(),
-        context.getColour());
+        context.getColour(),
+        true);
     shapes.push(newShape);
     repaint();
+  }
+
+  public void draw() {
+    // cant put negative numbers in g.drawRect/Oval/...(x, y, width, height);
+    int width = Math.abs(context.getPos().x - context.getPrevPos().x);
+    int height = Math.abs(context.getPos().y - context.getPrevPos().y);
+
+    // find the corner that closer to the left edge
+    int topLeftX = Math.min(context.getPrevPos().x, context.getPos().x);
+    int topLeftY = Math.min(context.getPrevPos().y, context.getPos().y);
+
+    Point position = new Point(topLeftX, topLeftY);
+    Point size = new Point(width, height);
+
+    Shape newShape = new Shape(
+        position,
+        size,
+        context.getShape(),
+        context.getColour(),
+        false);
+    shapes.push(newShape);
+    repaint();
+
   }
 
   public void cursor() {
@@ -32,8 +54,10 @@ public class PaintPanel extends JPanel {
   // needs to inheret the JPanel class to be able to call this
   @Override
   protected void paintComponent(Graphics g) {
+
     super.paintComponent(g); // clear the screen
-    if (context.getAction() == Action.DEFAULT) {
+
+    if (context.getAction() == Action.PAINT) {
       // change cursor colour
       if (context.getColour() != Color.WHITE)
         g.setColor(context.getColour());
@@ -53,23 +77,49 @@ public class PaintPanel extends JPanel {
             context.getSize().y);
       }
     }
+
+    else if (context.getAction() == Action.DRAW) {
+      g.setColor(context.getColour());
+      g.fillOval(
+          context.getPos().x - context.getSize().x / 2,
+          context.getPos().y - context.getSize().y / 2,
+          context.getSize().x,
+          context.getSize().y);
+    }
+
     if (!shapes.empty()) {
       for (Shape shape : shapes) {
         g.setColor(shape.getColour());
-        if (shape.getId() == ShapeEnum.CIRCLE) {
-          g.fillOval(
-              shape.getPos().x - shape.getSize().x / 2,
-              shape.getPos().y - shape.getSize().y / 2,
-              shape.getSize().x,
-              shape.getSize().y);
-        }
+        if (shape.getFill() == true) {
+          if (shape.getId() == ShapeEnum.CIRCLE) {
+            g.fillOval(
+                shape.getPos().x - shape.getSize().x / 2,
+                shape.getPos().y - shape.getSize().y / 2,
+                shape.getSize().x,
+                shape.getSize().y);
+          }
 
-        else if (shape.getId() == ShapeEnum.RECTANGLE) {
-          g.fillRect(
-              shape.getPos().x - shape.getSize().x / 2,
-              shape.getPos().y - shape.getSize().y / 2,
-              shape.getSize().x,
-              shape.getSize().y);
+          else if (shape.getId() == ShapeEnum.RECTANGLE) {
+            g.fillRect(
+                shape.getPos().x - shape.getSize().x / 2,
+                shape.getPos().y - shape.getSize().y / 2,
+                shape.getSize().x,
+                shape.getSize().y);
+          }
+        } else if (shape.getFill() == false) {
+          if (shape.getId() == ShapeEnum.CIRCLE) {
+            g.drawOval(
+                shape.getPos().x,
+                shape.getPos().y,
+                shape.getSize().x,
+                shape.getSize().y);
+          } else if (shape.getId() == ShapeEnum.RECTANGLE) {
+            g.drawRect(
+                shape.getPos().x,
+                shape.getPos().y,
+                shape.getSize().x,
+                shape.getSize().y);
+          }
         }
       }
     }
