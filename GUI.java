@@ -233,6 +233,17 @@ public class GUI {
     sizeButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
+        if (Integer.valueOf(sizeX.getText()) < 2) {
+          sizeX.setText("2");
+        } else if (Integer.valueOf(sizeX.getText()) > 100) {
+          sizeX.setText("100");
+        }
+        if (Integer.valueOf(sizeY.getText()) < 2) {
+          sizeY.setText("2");
+        } else if (Integer.valueOf(sizeY.getText()) > 100) {
+          sizeY.setText("100");
+        }
+
         context.setSize(new Point(
             Integer.valueOf(sizeX.getText()),
             Integer.valueOf(sizeY.getText())));
