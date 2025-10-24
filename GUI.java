@@ -34,7 +34,7 @@ public class GUI {
   private Color colourArr[];
   private JButton colourButtons[] = new JButton[AMOUNT_OF_COLOURS];
   private JButton sizeButton = new JButton("Resize");
-  private JButton clearButton = new JButton("Clear Screen");
+  private JButton clearButton;
 
   // TEXT FIELDS
   private JTextField sizeX = new JTextField();
@@ -74,7 +74,7 @@ public class GUI {
     toolPanel.setBackground(Color.GRAY);
 
     // -- shape selector(drawing shapes)
-    JLabel shapes = new JLabel("Shapes");
+    JLabel shapes = new JLabel("Draw Shapes");
     toolPanel.add(shapes);
 
     shapeArr = new ShapeEnum[] { ShapeEnum.CIRCLE, ShapeEnum.RECTANGLE };
@@ -82,19 +82,19 @@ public class GUI {
     JPanel shapeSelectorPanel = new JPanel(new GridLayout(1, 2));
 
     for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
-      shapeButtons[i] = new JButton(icons.getIcon(shapeArr[i]));
+      shapeButtons[i] = new JButton(icons.getShapeIcon(shapeArr[i]));
       shapeSelectorPanel.add(shapeButtons[i]);
     }
     toolPanel.add(shapeSelectorPanel);
 
     // -- brush shapes selector
-    JLabel brushShapes = new JLabel("Brush Shapes");
+    JLabel brushShapes = new JLabel("Paint Shapes");
     toolPanel.add(brushShapes);
 
     JPanel brushShapeSelectorPanel = new JPanel(new GridLayout(1, 2));
 
     for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
-      brushShapeButtons[i] = new JButton(icons.getIcon(shapeArr[i]));
+      brushShapeButtons[i] = new JButton(icons.getShapeIcon(shapeArr[i]));
       brushShapeSelectorPanel.add(brushShapeButtons[i]);
     }
     brushShapeButtons[0].setEnabled(false); // default shape
@@ -137,6 +137,7 @@ public class GUI {
     JLabel clearLabel = new JLabel("Clear Screen");
     toolPanel.add(clearLabel);
     JPanel clearPanel = new JPanel(new GridLayout(1, 1));
+    clearButton = new JButton(icons.getUIIcon("bin"));
     clearPanel.add(clearButton);
     toolPanel.add(clearPanel);
     // END <-
