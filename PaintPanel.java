@@ -34,6 +34,11 @@ public class PaintPanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g); // clear the screen
     if (context.getAction() == Action.DEFAULT) {
+      // change cursor colour
+      if (context.getColour() != Color.WHITE)
+        g.setColor(context.getColour());
+      else
+        g.setColor(Color.BLACK);
       if (context.getShape() == ShapeEnum.CIRCLE) {
         g.drawOval(
             context.getPos().x - context.getSize().x / 2,

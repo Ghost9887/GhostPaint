@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 
 public class GUI {
 
   private final Context context = new Context();
+  private final IconManager icons = new IconManager();
 
   private final int SCREEN_WIDTH = 1200;
   private final int SCREEN_HEIGHT = 800;
@@ -21,13 +23,12 @@ public class GUI {
   private JButton homeButton = new JButton("Home");
   private JButton fileButton = new JButton("File");
   private JButton helpButton = new JButton("Help");
-  private JButton rectButton = new JButton("Rectangle");
-  private JButton circleButton = new JButton("Circle");
-  private JButton blueButton = new JButton("Blue");
-  private JButton redButton = new JButton("Red");
-  private JButton greenButton = new JButton("Green");
-  private JButton whiteButton = new JButton("White");
-  private JButton blackButton = new JButton("Black");
+  private final int AMOUNT_OF_SHAPES = 2;
+  private ShapeEnum shapeArr[];
+  private JButton shapeButtons[] = new JButton[AMOUNT_OF_SHAPES];
+  private final int AMOUNT_OF_COLOURS = 5;
+  private Color colourArr[];
+  private JButton colourButtons[] = new JButton[AMOUNT_OF_COLOURS];
   private JButton sizeButton = new JButton("Resize");
 
   // TEXT FIELDS
@@ -41,6 +42,9 @@ public class GUI {
     mainPanel = new PaintPanel(context);
     mainPanel.setLayout(new BorderLayout());
     mainPanel.setBackground(Color.WHITE);
+
+    // init icons
+    icons.initIcons();
 
     // NAV PANEL->
     navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -61,37 +65,36 @@ public class GUI {
     toolPanel.setBackground(Color.GRAY);
 
     // --shapes selector
-    // default shape
-    circleButton.setEnabled(false);
-
     JLabel shapes = new JLabel("Brush Shapes");
     toolPanel.add(shapes);
 
     JPanel shapeSelectorPanel = new JPanel(new GridLayout(2, 2));
     shapeSelectorPanel.setOpaque(false); // use the gray background
-    shapeSelectorPanel.add(rectButton);
-    shapeSelectorPanel.add(circleButton);
+
+    shapeArr = new ShapeEnum[] { ShapeEnum.CIRCLE, ShapeEnum.RECTANGLE };
+
+    for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
+      shapeButtons[i] = new JButton(icons.getIcon(shapeArr[i]));
+      shapeSelectorPanel.add(shapeButtons[i]);
+    }
+    shapeButtons[0].setEnabled(false); // default shape
     toolPanel.add(shapeSelectorPanel);
 
     // --colours
-    // default colour
-    blackButton.setEnabled(false);
-
     JLabel colours = new JLabel("Colours");
     toolPanel.add(colours);
 
     JPanel colourPanel = new JPanel(new GridLayout(3, 2));
     colourPanel.setOpaque(false);
-    blueButton.setBackground(Color.BLUE);
-    colourPanel.add(blueButton);
-    redButton.setBackground(Color.RED);
-    colourPanel.add(redButton);
-    greenButton.setBackground(Color.GREEN);
-    colourPanel.add(greenButton);
-    whiteButton.setBackground(Color.WHITE);
-    colourPanel.add(whiteButton);
-    blackButton.setBackground(Color.BLACK);
-    colourPanel.add(blackButton);
+
+    colourArr = new Color[] { Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.WHITE };
+
+    for (int i = 0; i < AMOUNT_OF_COLOURS; i++) {
+      colourButtons[i] = new JButton();
+      colourButtons[i].setBackground(colourArr[i]);
+      colourPanel.add(colourButtons[i]);
+    }
+    colourButtons[0].setEnabled(false); // default colour
     toolPanel.add(colourPanel);
 
     // --size
@@ -130,7 +133,6 @@ public class GUI {
     checkButtonInputs();
   }
 
-  // TODO: maybe move actions to a seperate class
   private void checkMouseInputs(JLabel label) {
     // when clicked (ONLY PAINTS THE ONE LOCATION)
     mainPanel.addMouseListener(new MouseAdapter() {
@@ -161,78 +163,45 @@ public class GUI {
     });
   }
 
-  // TODO: change into array
-  private void checkButtonInputs() {
-    rectButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setShape(ShapeEnum.RECTANGLE);
-        rectButton.setEnabled(false);
-        circleButton.setEnabled(true);
-      }
-    });
-    circleButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setShape(ShapeEnum.CIRCLE);
-        circleButton.setEnabled(false);
-        rectButton.setEnabled(true);
-      }
-    });
-    blueButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setColour(Color.BLUE);
-        blueButton.setEnabled(false);
-        redButton.setEnabled(true);
-        greenButton.setEnabled(true);
-        whiteButton.setEnabled(true);
-      }
-    });
-    redButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setColour(Color.RED);
-        redButton.setEnabled(false);
-        blueButton.setEnabled(true);
-        greenButton.setEnabled(true);
-        whiteButton.setEnabled(true);
-        blackButton.setEnabled(true);
-      }
-    });
-    greenButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setColour(Color.GREEN);
-        greenButton.setEnabled(false);
-        blueButton.setEnabled(true);
-        redButton.setEnabled(true);
-        whiteButton.setEnabled(true);
-        blackButton.setEnabled(true);
-      }
-    });
-    whiteButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setColour(Color.WHITE);
-        whiteButton.setEnabled(false);
-        blueButton.setEnabled(true);
-        redButton.setEnabled(true);
-        greenButton.setEnabled(true);
-        blackButton.setEnabled(true);
-      }
-    });
-    blackButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        context.setColour(Color.BLACK);
-        blackButton.setEnabled(false);
-        blueButton.setEnabled(true);
-        redButton.setEnabled(true);
-        greenButton.setEnabled(true);
-        whiteButton.setEnabled(true);
-      }
-    });
+  public void checkButtonInputs() {
+
+    // PAINT BRUSH SHAPES
+    for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
+      final int index = i;
+      shapeButtons[index].addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+          context.setShape(shapeArr[index]);
+          shapeButtons[index].setEnabled(false);
+          for (int j = 0; j < AMOUNT_OF_SHAPES; j++) {
+            if (index != j) {
+              shapeButtons[j].setEnabled(true);
+            }
+          }
+        }
+      });
+    }
+
+    // COLOURS
+    for (int i = 0; i < AMOUNT_OF_COLOURS; i++) {
+      // java thing needs to be like this because of the anonymous function
+      final int index = i;
+      colourButtons[index].addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+          context.setColour(colourArr[index]);
+          colourButtons[index].setEnabled(false);
+          for (int j = 0; j < AMOUNT_OF_COLOURS; j++) {
+            if (index != j) {
+              colourButtons[j].setEnabled(true);
+            }
+          }
+        }
+      });
+    }
+
+    // SIZE
     sizeButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
@@ -246,7 +215,6 @@ public class GUI {
         } else if (Integer.valueOf(sizeY.getText()) > MAX_SIZE) {
           sizeY.setText(String.valueOf(MAX_SIZE));
         }
-
         context.setSize(new Point(
             Integer.valueOf(sizeX.getText()),
             Integer.valueOf(sizeY.getText())));
