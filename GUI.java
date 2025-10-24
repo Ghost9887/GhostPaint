@@ -9,6 +9,9 @@ public class GUI {
   private final int SCREEN_WIDTH = 1200;
   private final int SCREEN_HEIGHT = 800;
 
+  private final int MAX_SIZE = 150;
+  private final int MIN_SIZE = 2;
+
   private JFrame mainFrame;
   private PaintPanel mainPanel;
   private JPanel navPanel;
@@ -61,7 +64,7 @@ public class GUI {
     // default shape
     circleButton.setEnabled(false);
 
-    JLabel shapes = new JLabel("Shapes");
+    JLabel shapes = new JLabel("Brush Shapes");
     toolPanel.add(shapes);
 
     JPanel shapeSelectorPanel = new JPanel(new GridLayout(2, 2));
@@ -233,15 +236,15 @@ public class GUI {
     sizeButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
-        if (Integer.valueOf(sizeX.getText()) < 2) {
-          sizeX.setText("2");
-        } else if (Integer.valueOf(sizeX.getText()) > 100) {
-          sizeX.setText("100");
+        if (Integer.valueOf(sizeX.getText()) < MIN_SIZE) {
+          sizeX.setText(String.valueOf(MIN_SIZE));
+        } else if (Integer.valueOf(sizeX.getText()) > MAX_SIZE) {
+          sizeX.setText(String.valueOf(MAX_SIZE));
         }
-        if (Integer.valueOf(sizeY.getText()) < 2) {
-          sizeY.setText("2");
-        } else if (Integer.valueOf(sizeY.getText()) > 100) {
-          sizeY.setText("100");
+        if (Integer.valueOf(sizeY.getText()) < MIN_SIZE) {
+          sizeY.setText(String.valueOf(MIN_SIZE));
+        } else if (Integer.valueOf(sizeY.getText()) > MAX_SIZE) {
+          sizeY.setText(String.valueOf(MAX_SIZE));
         }
 
         context.setSize(new Point(
