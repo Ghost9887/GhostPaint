@@ -27,14 +27,18 @@ public class GUI {
   private JButton homeButton = new JButton("Home");
   private JButton fileButton = new JButton("File");
   private JButton helpButton = new JButton("Help");
+
   private final int AMOUNT_OF_SHAPES = 2;
   private ShapeEnum shapeArr[];
   private JButton shapeButtons[] = new JButton[AMOUNT_OF_SHAPES];
   private JButton brushShapeButtons[] = new JButton[AMOUNT_OF_SHAPES];
+
   private final int AMOUNT_OF_COLOURS = 5;
   private Color colourArr[];
   private JButton colourButtons[] = new JButton[AMOUNT_OF_COLOURS];
+
   private JButton sizeButton = new JButton("Resize");
+
   private JButton clearButton;
 
   // TEXT FIELDS
@@ -161,6 +165,8 @@ public class GUI {
     checkButtonInputs();
   }
 
+
+  //TODO: Refacotr calling context depnded of the case but there might be a better way
   private void checkMouseInputs() {
     // when clicked (ONLY PAINTS THE ONE LOCATION)
     mainPanel.addMouseListener(new MouseAdapter() {

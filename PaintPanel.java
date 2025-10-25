@@ -85,11 +85,12 @@ public class PaintPanel extends JPanel {
 
     else if (context.getAction() == Action.DRAW) {
       g.setColor(context.getColour());
+      //default size for the cursor
       g.fillOval(
-          context.getPos().x - context.getSize().x / 2,
-          context.getPos().y - context.getSize().y / 2,
-          context.getSize().x,
-          context.getSize().y);
+          context.getPos().x - 5,
+          context.getPos().y - 5,
+          10,
+          10);
     }
 
     if (!shapes.empty()) {
