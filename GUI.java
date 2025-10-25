@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class GUI {
 
@@ -165,10 +166,13 @@ public class GUI {
     mainPanel.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent event) {
-        context.setPos(event.getPoint());
         switch (context.getAction()) {
           case Action.PAINT:
-            mainPanel.paint();
+            context.setPrevPos(context.getPos());
+            context.setPos(event.getPoint());
+            ArrayList<Point> list = new ArrayList<>();
+            list.add(context.getPos());
+            mainPanel.paint(list);
             break;
           case Action.DRAW:
             context.setPrevPos(context.getPos());
@@ -181,11 +185,12 @@ public class GUI {
     mainPanel.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent event) {
-        context.setPos(event.getPoint());
         switch (context.getAction()) {
           case Action.PAINT:
+            context.setPos(event.getPoint());
             break;
           case Action.DRAW:
+            context.setPos(event.getPoint());
             break;
           default:
             break;
@@ -195,9 +200,9 @@ public class GUI {
       // when released
       @Override
       public void mouseReleased(MouseEvent event) {
-        context.setPos(event.getPoint());
         switch (context.getAction()) {
           case Action.DRAW:
+            context.setPos(event.getPoint());
             mainPanel.draw();
             break;
           default:
@@ -206,20 +211,22 @@ public class GUI {
       }
     });
     mainPanel.addMouseMotionListener(new MouseAdapter() {
-      // when pressed (ONLY PAINTS WHEN MOUSE IS MOVED)
+      // when dragged (ONLY PAINTS WHEN MOUSE IS MOVED)
       @Override
       public void mouseDragged(MouseEvent event) {
-        context.setPos(event.getPoint());
-        posLabel.setText("X: " + context.getPos().x + " | Y: " + context.getPos().y + " | ");
-        switch (context.getAction()) {
+       switch (context.getAction()) {
           case Action.PAINT:
-            mainPanel.paint();
+            context.setPrevPos(context.getPos());
+            ArrayList<Point> list = getNewPos();
+            context.setPos(event.getPoint());
+            mainPanel.paint(getNewPos());
             break;
           case Action.DRAW:
             break;
           default:
             break;
         }
+        posLabel.setText("X: " + context.getPos().x + " | Y: " + context.getPos().y + " | ");
       }
 
       // when not pressed
@@ -233,7 +240,6 @@ public class GUI {
   }
 
   public void checkButtonInputs() {
-
     // SHAPES
     for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
       final int index = i;
@@ -322,36 +328,36 @@ public class GUI {
     });
   }
 
-  /*
-   * public ArrayList<Point> getNewPos() {
-   * ArrayList<Point> newPositions = new ArrayList<>();
-   * int x = mousePos.x;
-   * int y = mousePos.y;
-   * int newX = newMousePos.x;
-   * int newY = newMousePos.y;
-   * 
-   * while (true) {
-   * if (x != newX && x > newX) {
-   * x--;
-   * newPositions.add(new Point(x, y));
-   * }
-   * if (y != newY && y > newY) {
-   * y--;
-   * newPositions.add(new Point(x, y));
-   * }
-   * if (x != newX && x < newX) {
-   * x++;
-   * newPositions.add(new Point(x, y));
-   * }
-   * if (y != newY && y < newY) {
-   * y++;
-   * newPositions.add(new Point(x, y));
-   * }
-   * if (x == newX && y == newY)
-   * break;
-   * }
-   * 
-   * return newPositions;
-   * }
-   */
+  
+   public ArrayList<Point> getNewPos() {
+    ArrayList<Point> newPositions = new ArrayList<>();
+    int x = context.getPos().x;
+    int y = context.getPos().y;
+    int newX = context.getPrevPos().x;
+    int newY = context.getPrevPos().y;
+    
+    while (true) {
+      if (x != newX && x > newX) {
+      x--;
+      newPositions.add(new Point(x, y));
+    }
+      if (y != newY && y > newY) {
+      y--;
+      newPositions.add(new Point(x, y));
+    }
+      if (x != newX && x < newX) {
+      x++;
+      newPositions.add(new Point(x, y));
+    }
+      if (y != newY && y < newY) {
+      y++;
+      newPositions.add(new Point(x, y));
+    }
+      if (x == newX && y == newY)
+      break;
+    }
+    
+    return newPositions;
+    }
+   
 }

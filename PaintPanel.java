@@ -13,14 +13,16 @@ public class PaintPanel extends JPanel {
     this.context = context;
   }
 
-  public void paint() {
+  public void paint(ArrayList<Point> list) {
+    for(int i = 0; i < list.size(); i++){
     Shape newShape = new Shape(
-        context.getPos(),
-        context.getSize(),
-        context.getShape(),
-        context.getColour(),
-        true);
-    shapes.push(newShape);
+          list.get(i),
+          context.getSize(),
+          context.getShape(),
+          context.getColour(),
+          true);
+      shapes.push(newShape);
+    }
     repaint();
   }
 
