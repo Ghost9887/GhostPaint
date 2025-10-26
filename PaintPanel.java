@@ -14,12 +14,19 @@ public class PaintPanel extends JPanel {
   }
 
   public void paint(ArrayList<Point> list) {
+    Color colour;
+    if(context.getAction() == Action.ERASE){
+      colour = Color.WHITE;
+    }
+    else{
+      colour = context.getColour();
+    }
     for(int i = 0; i < list.size(); i++){
     Shape newShape = new Shape(
           list.get(i),
           context.getSize(),
           context.getShape(),
-          context.getColour(),
+          colour,
           true);
       shapes.push(newShape);
     }
@@ -83,7 +90,7 @@ public class PaintPanel extends JPanel {
       }
     }
 
-    else if (context.getAction() == Action.DRAW) {
+    else if (context.getAction() == Action.DRAW || context.getAction() == Action.FILL) {
       g.setColor(context.getColour());
       //default size for the cursor
       g.fillOval(
@@ -91,6 +98,15 @@ public class PaintPanel extends JPanel {
           context.getPos().y - 5,
           10,
           10);
+    }
+
+    else if(context.getAction() == Action.ERASE){
+      g.setColor(Color.BLACK);
+      g.drawOval(
+        context.getPos().x - context.getSize().x / 2,
+        context.getPos().y - context.getSize().y / 2,
+        context.getSize().x,
+        context.getSize().y);
     }
 
     if (!shapes.empty()) {
@@ -104,7 +120,6 @@ public class PaintPanel extends JPanel {
                 shape.getSize().x,
                 shape.getSize().y);
           }
-
           else if (shape.getId() == ShapeEnum.RECTANGLE) {
             g.fillRect(
                 shape.getPos().x - shape.getSize().x / 2,

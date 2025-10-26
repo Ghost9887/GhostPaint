@@ -21,19 +21,24 @@ public class GUI {
 
   // LABLES
   private JLabel posLabel = new JLabel("");
-  private JLabel actionLabel = new JLabel("");
+  private JLabel actionLabel = new JLabel("Paint");
 
   // BUTTONS
-  private JButton homeButton = new JButton("Home");
-  private JButton fileButton = new JButton("File");
-  private JButton helpButton = new JButton("Help");
+  private JButton undoButton;
+  private JButton redoButton;
+  private JButton saveButton;
+  private JButton exportButton;
+  private JButton helpButton;
+  private JButton brushToolButton;
+  private JButton drawToolButton;
+  private JButton bucketToolButton;
+  private JButton rubberToolButton;
 
   private final int AMOUNT_OF_SHAPES = 2;
   private ShapeEnum shapeArr[];
   private JButton shapeButtons[] = new JButton[AMOUNT_OF_SHAPES];
-  private JButton brushShapeButtons[] = new JButton[AMOUNT_OF_SHAPES];
 
-  private final int AMOUNT_OF_COLOURS = 5;
+  private final int AMOUNT_OF_COLOURS = 12;
   private Color colourArr[];
   private JButton colourButtons[] = new JButton[AMOUNT_OF_COLOURS];
 
@@ -60,15 +65,24 @@ public class GUI {
     navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     navPanel.setBackground(Color.GRAY);
 
-    navPanel.add(homeButton);
-    navPanel.add(fileButton);
+
+    undoButton = new JButton(icons.getUIIcon("undo"));
+    redoButton = new JButton(icons.getUIIcon("redo"));
+    saveButton = new JButton(icons.getUIIcon("save"));
+    exportButton = new JButton(icons.getUIIcon("export"));
+    helpButton = new JButton(icons.getUIIcon("help"));
+
+    navPanel.add(undoButton);
+    navPanel.add(redoButton);
+    navPanel.add(saveButton);
+    navPanel.add(exportButton);
     navPanel.add(helpButton);
+
 
     posLabel = new JLabel("");
     posLabel.setFont(new Font(posLabel.getFont().getName(), posLabel.getFont().getStyle(), 20));
     navPanel.add(posLabel, BorderLayout.NORTH);
 
-    actionLabel = new JLabel("");
     actionLabel.setFont(new Font(actionLabel.getFont().getName(), actionLabel.getFont().getStyle(), 20));
     navPanel.add(actionLabel, BorderLayout.NORTH);
     // END <-
@@ -78,8 +92,27 @@ public class GUI {
     toolPanel.setLayout(new BoxLayout(toolPanel, BoxLayout.Y_AXIS));
     toolPanel.setBackground(Color.GRAY);
 
-    // -- shape selector(drawing shapes)
-    JLabel shapes = new JLabel("Draw Shapes");
+    //--Tools
+    JLabel tools = new JLabel("Tools");
+    toolPanel.add(tools);
+
+    JPanel toolSelectorPanel = new JPanel(new GridLayout(2, 2));
+
+    brushToolButton = new JButton(icons.getUIIcon("brush"));
+    brushToolButton.setEnabled(false);
+    drawToolButton = new JButton(icons.getUIIcon("draw"));
+    bucketToolButton = new JButton(icons.getUIIcon("bucket"));
+    rubberToolButton = new JButton(icons.getUIIcon("rubber"));
+    
+    toolSelectorPanel.add(brushToolButton);
+    toolSelectorPanel.add(drawToolButton);
+    toolSelectorPanel.add(bucketToolButton);
+    toolSelectorPanel.add(rubberToolButton);
+
+    toolPanel.add(toolSelectorPanel);
+
+    // -- shape selector
+    JLabel shapes = new JLabel("Shapes");
     toolPanel.add(shapes);
 
     shapeArr = new ShapeEnum[] { ShapeEnum.CIRCLE, ShapeEnum.RECTANGLE };
@@ -90,28 +123,20 @@ public class GUI {
       shapeButtons[i] = new JButton(icons.getShapeIcon(shapeArr[i]));
       shapeSelectorPanel.add(shapeButtons[i]);
     }
+    shapeButtons[0].setEnabled(false);
     toolPanel.add(shapeSelectorPanel);
-
-    // -- brush shapes selector
-    JLabel brushShapes = new JLabel("Paint Shapes");
-    toolPanel.add(brushShapes);
-
-    JPanel brushShapeSelectorPanel = new JPanel(new GridLayout(1, 2));
-
-    for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
-      brushShapeButtons[i] = new JButton(icons.getShapeIcon(shapeArr[i]));
-      brushShapeSelectorPanel.add(brushShapeButtons[i]);
-    }
-    brushShapeButtons[0].setEnabled(false); // default shape
-    toolPanel.add(brushShapeSelectorPanel);
 
     // --colours
     JLabel colours = new JLabel("Colours");
     toolPanel.add(colours);
 
-    JPanel colourPanel = new JPanel(new GridLayout(3, 2));
+    JPanel colourPanel = new JPanel(new GridLayout(4, 3));
 
-    colourArr = new Color[] { Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.WHITE };
+    colourArr = new Color[] { Color.BLACK, Color.RED, 
+      Color.GREEN, Color.BLUE, Color.WHITE, Color.YELLOW,
+      Color.PINK, Color.GRAY, Color.ORANGE, Color.MAGENTA,
+      Color.CYAN, Color.LIGHT_GRAY
+    };
 
     for (int i = 0; i < AMOUNT_OF_COLOURS; i++) {
       colourButtons[i] = new JButton();
@@ -183,6 +208,13 @@ public class GUI {
           case Action.DRAW:
             context.setPrevPos(context.getPos());
             break;
+          case Action.ERASE:
+            context.setPrevPos(context.getPos());
+            context.setPos(event.getPoint());
+            ArrayList<Point> list1 = new ArrayList<>();
+            list1.add(context.getPos());
+            mainPanel.paint(list1);
+            break;
           default:
             break;
         }
@@ -198,6 +230,8 @@ public class GUI {
           case Action.DRAW:
             context.setPos(event.getPoint());
             break;
+          case Action.ERASE:
+            context.setPos(event.getPoint());
           default:
             break;
         }
@@ -223,12 +257,15 @@ public class GUI {
        switch (context.getAction()) {
           case Action.PAINT:
             context.setPrevPos(context.getPos());
-            ArrayList<Point> list = getNewPos();
             context.setPos(event.getPoint());
             mainPanel.paint(getNewPos());
             break;
           case Action.DRAW:
             break;
+          case Action.ERASE:
+            context.setPrevPos(context.getPos());
+            context.setPos(event.getPoint());
+            mainPanel.paint(getNewPos());
           default:
             break;
         }
@@ -246,6 +283,53 @@ public class GUI {
   }
 
   public void checkButtonInputs() {
+
+    //TOOLS
+    brushToolButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event){
+        brushToolButton.setEnabled(false);
+        drawToolButton.setEnabled(true);
+        bucketToolButton.setEnabled(true);
+        rubberToolButton.setEnabled(true);
+        context.setAction(Action.PAINT);
+        actionLabel.setText("Paint");
+      }
+    });
+    drawToolButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event){
+        drawToolButton.setEnabled(false);
+        brushToolButton.setEnabled(true);
+        bucketToolButton.setEnabled(true);
+        rubberToolButton.setEnabled(true);
+        context.setAction(Action.DRAW);
+        actionLabel.setText("Draw");
+      }
+    });
+    bucketToolButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event){
+        bucketToolButton.setEnabled(false);
+        brushToolButton.setEnabled(true);
+        drawToolButton.setEnabled(true);
+        rubberToolButton.setEnabled(true);
+        context.setAction(Action.FILL);
+        actionLabel.setText("Fill");
+      }
+    });
+    rubberToolButton.addActionListener(new ActionListener(){
+      @Override
+      public void actionPerformed(ActionEvent event){
+        rubberToolButton.setEnabled(false);
+        brushToolButton.setEnabled(true);
+        drawToolButton.setEnabled(true);
+        bucketToolButton.setEnabled(true);
+        context.setAction(Action.ERASE);
+        actionLabel.setText("Erase");
+      }
+    });
+
     // SHAPES
     for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
       final int index = i;
@@ -253,35 +337,10 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent event) {
           context.setShape(shapeArr[index]);
-          context.setAction(Action.DRAW);
-          actionLabel.setText("Draw");
           shapeButtons[index].setEnabled(false);
           for (int j = 0; j < AMOUNT_OF_SHAPES; j++) {
-            // unselect the bursh shape buttons
-            brushShapeButtons[j].setEnabled(true);
             if (index != j) {
               shapeButtons[j].setEnabled(true);
-            }
-          }
-        }
-      });
-    }
-
-    // PAINT BRUSH SHAPES
-    for (int i = 0; i < AMOUNT_OF_SHAPES; i++) {
-      final int index = i;
-      brushShapeButtons[index].addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent event) {
-          context.setShape(shapeArr[index]);
-          context.setAction(Action.PAINT);
-          actionLabel.setText("Paint");
-          brushShapeButtons[index].setEnabled(false);
-          for (int j = 0; j < AMOUNT_OF_SHAPES; j++) {
-            // unselect the shape buttons
-            shapeButtons[j].setEnabled(true);
-            if (index != j) {
-              brushShapeButtons[j].setEnabled(true);
             }
           }
         }
