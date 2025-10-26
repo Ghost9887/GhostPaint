@@ -284,6 +284,21 @@ public class GUI {
 
   public void checkButtonInputs() {
 
+    //Nav bar
+    undoButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event){
+        mainPanel.undo();
+      }
+    });
+
+    redoButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event){
+        mainPanel.redo();
+      }
+    });
+
     //TOOLS
     brushToolButton.addActionListener(new ActionListener() {
       @Override

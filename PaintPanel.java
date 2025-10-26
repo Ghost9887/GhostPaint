@@ -8,6 +8,7 @@ public class PaintPanel extends JPanel {
   private final Context context;
 
   private Stack<Shape> shapes = new Stack<>();
+  private Stack<Shape> removedShapes = new Stack<>();
 
   public PaintPanel(Context context) {
     this.context = context;
@@ -61,6 +62,20 @@ public class PaintPanel extends JPanel {
 
   public void clearScreen() {
     shapes.clear();
+  }
+
+  public void undo(){
+    if(!shapes.empty()){
+      removedShapes.push(shapes.pop());
+      repaint();
+    }
+  }
+
+  public void redo(){
+    if(!removedShapes.empty()){
+      shapes.push(removedShapes.pop());
+      repaint();
+    }
   }
 
   // needs to inheret the JPanel class to be able to call this
