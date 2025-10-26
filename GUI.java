@@ -7,6 +7,7 @@ public class GUI {
 
   private final Context context = new Context();
   private final IconManager icons = new IconManager();
+  private final Save save = new Save();
 
   private final int SCREEN_WIDTH = 1200;
   private final int SCREEN_HEIGHT = 800;
@@ -296,6 +297,13 @@ public class GUI {
       @Override
       public void actionPerformed(ActionEvent event){
         mainPanel.redo();
+      }
+    });
+
+    saveButton.addActionListener(new ActionListener(){
+      @Override
+      public void actionPerformed(ActionEvent event){
+        save.saveFile();
       }
     });
 
