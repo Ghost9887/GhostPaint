@@ -83,7 +83,11 @@ public class PaintPanel extends JPanel {
   }
 
   public void loadFile() {
-    save.loadFile();
+    ArrayList<Shape> list = save.loadFile();
+    for (int i = 0; i < list.size(); i++) {
+      shapes.push(list.get(i));
+    }
+    repaint();
   }
 
   // needs to inheret the JPanel class to be able to call this
