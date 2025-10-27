@@ -7,7 +7,6 @@ public class GUI {
 
   private final Context context = new Context();
   private final IconManager icons = new IconManager();
-  private final Save save = new Save();
 
   private final int SCREEN_WIDTH = 1200;
   private final int SCREEN_HEIGHT = 800;
@@ -66,7 +65,6 @@ public class GUI {
     navPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     navPanel.setBackground(Color.GRAY);
 
-
     undoButton = new JButton(icons.getUIIcon("undo"));
     redoButton = new JButton(icons.getUIIcon("redo"));
     saveButton = new JButton(icons.getUIIcon("save"));
@@ -78,7 +76,6 @@ public class GUI {
     navPanel.add(saveButton);
     navPanel.add(exportButton);
     navPanel.add(helpButton);
-
 
     posLabel = new JLabel("");
     posLabel.setFont(new Font(posLabel.getFont().getName(), posLabel.getFont().getStyle(), 20));
@@ -93,7 +90,7 @@ public class GUI {
     toolPanel.setLayout(new BoxLayout(toolPanel, BoxLayout.Y_AXIS));
     toolPanel.setBackground(Color.GRAY);
 
-    //--Tools
+    // --Tools
     JLabel tools = new JLabel("Tools");
     toolPanel.add(tools);
 
@@ -104,7 +101,7 @@ public class GUI {
     drawToolButton = new JButton(icons.getUIIcon("draw"));
     bucketToolButton = new JButton(icons.getUIIcon("bucket"));
     rubberToolButton = new JButton(icons.getUIIcon("rubber"));
-    
+
     toolSelectorPanel.add(brushToolButton);
     toolSelectorPanel.add(drawToolButton);
     toolSelectorPanel.add(bucketToolButton);
@@ -133,10 +130,10 @@ public class GUI {
 
     JPanel colourPanel = new JPanel(new GridLayout(4, 3));
 
-    colourArr = new Color[] { Color.BLACK, Color.RED, 
-      Color.GREEN, Color.BLUE, Color.WHITE, Color.YELLOW,
-      Color.PINK, Color.GRAY, Color.ORANGE, Color.MAGENTA,
-      Color.CYAN, Color.LIGHT_GRAY
+    colourArr = new Color[] { Color.BLACK, Color.RED,
+        Color.GREEN, Color.BLUE, Color.WHITE, Color.YELLOW,
+        Color.PINK, Color.GRAY, Color.ORANGE, Color.MAGENTA,
+        Color.CYAN, Color.LIGHT_GRAY
     };
 
     for (int i = 0; i < AMOUNT_OF_COLOURS; i++) {
@@ -191,8 +188,8 @@ public class GUI {
     checkButtonInputs();
   }
 
-
-  //TODO: Refacotr calling context depnded of the case but there might be a better way
+  // TODO: Refacotr calling context depnded of the case but there might be a
+  // better way
   private void checkMouseInputs() {
     // when clicked (ONLY PAINTS THE ONE LOCATION)
     mainPanel.addMouseListener(new MouseAdapter() {
@@ -255,7 +252,7 @@ public class GUI {
       // when dragged (ONLY PAINTS WHEN MOUSE IS MOVED)
       @Override
       public void mouseDragged(MouseEvent event) {
-       switch (context.getAction()) {
+        switch (context.getAction()) {
           case Action.PAINT:
             context.setPrevPos(context.getPos());
             context.setPos(event.getPoint());
@@ -285,32 +282,39 @@ public class GUI {
 
   public void checkButtonInputs() {
 
-    //Nav bar
+    // Nav bar
     undoButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
+      public void actionPerformed(ActionEvent event) {
         mainPanel.undo();
       }
     });
 
     redoButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
+      public void actionPerformed(ActionEvent event) {
         mainPanel.redo();
       }
     });
 
-    saveButton.addActionListener(new ActionListener(){
+    saveButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
-        save.saveFile();
+      public void actionPerformed(ActionEvent event) {
+        mainPanel.saveFile();
       }
     });
 
-    //TOOLS
+    exportButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        mainPanel.loadFile();
+      }
+    });
+
+    // TOOLS
     brushToolButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
+      public void actionPerformed(ActionEvent event) {
         brushToolButton.setEnabled(false);
         drawToolButton.setEnabled(true);
         bucketToolButton.setEnabled(true);
@@ -321,7 +325,7 @@ public class GUI {
     });
     drawToolButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
+      public void actionPerformed(ActionEvent event) {
         drawToolButton.setEnabled(false);
         brushToolButton.setEnabled(true);
         bucketToolButton.setEnabled(true);
@@ -332,7 +336,7 @@ public class GUI {
     });
     bucketToolButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
+      public void actionPerformed(ActionEvent event) {
         bucketToolButton.setEnabled(false);
         brushToolButton.setEnabled(true);
         drawToolButton.setEnabled(true);
@@ -341,9 +345,9 @@ public class GUI {
         actionLabel.setText("Fill");
       }
     });
-    rubberToolButton.addActionListener(new ActionListener(){
+    rubberToolButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event){
+      public void actionPerformed(ActionEvent event) {
         rubberToolButton.setEnabled(false);
         brushToolButton.setEnabled(true);
         drawToolButton.setEnabled(true);
@@ -416,36 +420,35 @@ public class GUI {
     });
   }
 
-  
-   public ArrayList<Point> getNewPos() {
+  public ArrayList<Point> getNewPos() {
     ArrayList<Point> newPositions = new ArrayList<>();
     int x = context.getPos().x;
     int y = context.getPos().y;
     int newX = context.getPrevPos().x;
     int newY = context.getPrevPos().y;
-    
+
     while (true) {
       if (x != newX && x > newX) {
-      x--;
-      newPositions.add(new Point(x, y));
-    }
+        x--;
+        newPositions.add(new Point(x, y));
+      }
       if (y != newY && y > newY) {
-      y--;
-      newPositions.add(new Point(x, y));
-    }
+        y--;
+        newPositions.add(new Point(x, y));
+      }
       if (x != newX && x < newX) {
-      x++;
-      newPositions.add(new Point(x, y));
-    }
+        x++;
+        newPositions.add(new Point(x, y));
+      }
       if (y != newY && y < newY) {
-      y++;
-      newPositions.add(new Point(x, y));
-    }
+        y++;
+        newPositions.add(new Point(x, y));
+      }
       if (x == newX && y == newY)
-      break;
+        break;
     }
-    
+
     return newPositions;
-    }
-   
+  }
+
 }

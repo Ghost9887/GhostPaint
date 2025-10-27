@@ -6,6 +6,7 @@ import java.util.Stack;
 public class PaintPanel extends JPanel {
 
   private final Context context;
+  private final Save save = new Save();
 
   private Stack<Shape> shapes = new Stack<>();
   private Stack<Shape> removedShapes = new Stack<>();
@@ -16,14 +17,13 @@ public class PaintPanel extends JPanel {
 
   public void paint(ArrayList<Point> list) {
     Color colour;
-    if(context.getAction() == Action.ERASE){
+    if (context.getAction() == Action.ERASE) {
       colour = Color.WHITE;
-    }
-    else{
+    } else {
       colour = context.getColour();
     }
-    for(int i = 0; i < list.size(); i++){
-    Shape newShape = new Shape(
+    for (int i = 0; i < list.size(); i++) {
+      Shape newShape = new Shape(
           list.get(i),
           context.getSize(),
           context.getShape(),
@@ -64,18 +64,26 @@ public class PaintPanel extends JPanel {
     shapes.clear();
   }
 
-  public void undo(){
-    if(!shapes.empty()){
+  public void undo() {
+    if (!shapes.empty()) {
       removedShapes.push(shapes.pop());
       repaint();
     }
   }
 
-  public void redo(){
-    if(!removedShapes.empty()){
+  public void redo() {
+    if (!removedShapes.empty()) {
       shapes.push(removedShapes.pop());
       repaint();
     }
+  }
+
+  public void saveFile() {
+    save.saveFile(shapes);
+  }
+
+  public void loadFile() {
+    save.loadFile();
   }
 
   // needs to inheret the JPanel class to be able to call this
@@ -107,7 +115,7 @@ public class PaintPanel extends JPanel {
 
     else if (context.getAction() == Action.DRAW || context.getAction() == Action.FILL) {
       g.setColor(context.getColour());
-      //default size for the cursor
+      // default size for the cursor
       g.fillOval(
           context.getPos().x - 5,
           context.getPos().y - 5,
@@ -115,13 +123,13 @@ public class PaintPanel extends JPanel {
           10);
     }
 
-    else if(context.getAction() == Action.ERASE){
+    else if (context.getAction() == Action.ERASE) {
       g.setColor(Color.BLACK);
       g.drawOval(
-        context.getPos().x - context.getSize().x / 2,
-        context.getPos().y - context.getSize().y / 2,
-        context.getSize().x,
-        context.getSize().y);
+          context.getPos().x - context.getSize().x / 2,
+          context.getPos().y - context.getSize().y / 2,
+          context.getSize().x,
+          context.getSize().y);
     }
 
     if (!shapes.empty()) {
@@ -134,8 +142,7 @@ public class PaintPanel extends JPanel {
                 shape.getPos().y - shape.getSize().y / 2,
                 shape.getSize().x,
                 shape.getSize().y);
-          }
-          else if (shape.getId() == ShapeEnum.RECTANGLE) {
+          } else if (shape.getId() == ShapeEnum.RECTANGLE) {
             g.fillRect(
                 shape.getPos().x - shape.getSize().x / 2,
                 shape.getPos().y - shape.getSize().y / 2,
