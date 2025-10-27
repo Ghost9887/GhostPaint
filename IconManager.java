@@ -24,7 +24,7 @@ public class IconManager {
     UIIcons.put("undo", new ImageIcon("icons/undo.png"));
     UIIcons.put("bin", new ImageIcon("icons/bin.png"));
     UIIcons.put("save", new ImageIcon("icons/save.png"));
-    UIIcons.put("export", new ImageIcon("icons/export.png"));
+    UIIcons.put("load", new ImageIcon("icons/load.png"));
     UIIcons.put("help", new ImageIcon("icons/help.png"));
     UIIcons.put("brush", new ImageIcon("icons/brush.png"));
     UIIcons.put("draw", new ImageIcon("icons/draw.png"));

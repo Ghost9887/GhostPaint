@@ -27,7 +27,7 @@ public class GUI {
   private JButton undoButton;
   private JButton redoButton;
   private JButton saveButton;
-  private JButton exportButton;
+  private JButton loadButton;
   private JButton helpButton;
   private JButton brushToolButton;
   private JButton drawToolButton;
@@ -68,13 +68,13 @@ public class GUI {
     undoButton = new JButton(icons.getUIIcon("undo"));
     redoButton = new JButton(icons.getUIIcon("redo"));
     saveButton = new JButton(icons.getUIIcon("save"));
-    exportButton = new JButton(icons.getUIIcon("export"));
+    loadButton = new JButton(icons.getUIIcon("load"));
     helpButton = new JButton(icons.getUIIcon("help"));
 
     navPanel.add(undoButton);
     navPanel.add(redoButton);
     navPanel.add(saveButton);
-    navPanel.add(exportButton);
+    navPanel.add(loadButton);
     navPanel.add(helpButton);
 
     posLabel = new JLabel("");
@@ -304,7 +304,7 @@ public class GUI {
       }
     });
 
-    exportButton.addActionListener(new ActionListener() {
+    loadButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
         mainPanel.loadFile();
