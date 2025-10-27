@@ -28,10 +28,8 @@ public class GUI {
   private JButton redoButton;
   private JButton saveButton;
   private JButton loadButton;
-  private JButton exportButton;
   private JButton brushToolButton;
   private JButton drawToolButton;
-  private JButton bucketToolButton;
   private JButton rubberToolButton;
 
   private final int AMOUNT_OF_SHAPES = 2;
@@ -69,13 +67,11 @@ public class GUI {
     redoButton = new JButton(icons.getUIIcon("redo"));
     saveButton = new JButton(icons.getUIIcon("save"));
     loadButton = new JButton(icons.getUIIcon("load"));
-    exportButton = new JButton(icons.getUIIcon("export"));
 
     navPanel.add(undoButton);
     navPanel.add(redoButton);
     navPanel.add(saveButton);
     navPanel.add(loadButton);
-    navPanel.add(exportButton);
 
     posLabel = new JLabel("");
     posLabel.setFont(new Font(posLabel.getFont().getName(), posLabel.getFont().getStyle(), 20));
@@ -99,12 +95,10 @@ public class GUI {
     brushToolButton = new JButton(icons.getUIIcon("brush"));
     brushToolButton.setEnabled(false);
     drawToolButton = new JButton(icons.getUIIcon("draw"));
-    bucketToolButton = new JButton(icons.getUIIcon("bucket"));
     rubberToolButton = new JButton(icons.getUIIcon("rubber"));
 
     toolSelectorPanel.add(brushToolButton);
     toolSelectorPanel.add(drawToolButton);
-    toolSelectorPanel.add(bucketToolButton);
     toolSelectorPanel.add(rubberToolButton);
 
     toolPanel.add(toolSelectorPanel);
@@ -311,20 +305,12 @@ public class GUI {
       }
     });
 
-    exportButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        System.out.println("Export");
-      }
-    });
-
     // TOOLS
     brushToolButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
         brushToolButton.setEnabled(false);
         drawToolButton.setEnabled(true);
-        bucketToolButton.setEnabled(true);
         rubberToolButton.setEnabled(true);
         context.setAction(Action.PAINT);
         actionLabel.setText("Paint");
@@ -335,21 +321,9 @@ public class GUI {
       public void actionPerformed(ActionEvent event) {
         drawToolButton.setEnabled(false);
         brushToolButton.setEnabled(true);
-        bucketToolButton.setEnabled(true);
         rubberToolButton.setEnabled(true);
         context.setAction(Action.DRAW);
         actionLabel.setText("Draw");
-      }
-    });
-    bucketToolButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        bucketToolButton.setEnabled(false);
-        brushToolButton.setEnabled(true);
-        drawToolButton.setEnabled(true);
-        rubberToolButton.setEnabled(true);
-        context.setAction(Action.FILL);
-        actionLabel.setText("Fill");
       }
     });
     rubberToolButton.addActionListener(new ActionListener() {
@@ -358,7 +332,6 @@ public class GUI {
         rubberToolButton.setEnabled(false);
         brushToolButton.setEnabled(true);
         drawToolButton.setEnabled(true);
-        bucketToolButton.setEnabled(true);
         context.setAction(Action.ERASE);
         actionLabel.setText("Erase");
       }

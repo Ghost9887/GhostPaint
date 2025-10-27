@@ -25,10 +25,8 @@ public class IconManager {
     UIIcons.put("bin", new ImageIcon("icons/bin.png"));
     UIIcons.put("save", new ImageIcon("icons/save.png"));
     UIIcons.put("load", new ImageIcon("icons/load.png"));
-    UIIcons.put("export", new ImageIcon("icons/export.png"));
     UIIcons.put("brush", new ImageIcon("icons/brush.png"));
     UIIcons.put("draw", new ImageIcon("icons/draw.png"));
-    UIIcons.put("bucket", new ImageIcon("icons/bucket.png"));
     UIIcons.put("rubber", new ImageIcon("icons/rubber.png"));
     resizeShapeIcons();
     resizeUIIcons();
