@@ -28,7 +28,7 @@ public class GUI {
   private JButton redoButton;
   private JButton saveButton;
   private JButton loadButton;
-  private JButton helpButton;
+  private JButton exportButton;
   private JButton brushToolButton;
   private JButton drawToolButton;
   private JButton bucketToolButton;
@@ -69,13 +69,13 @@ public class GUI {
     redoButton = new JButton(icons.getUIIcon("redo"));
     saveButton = new JButton(icons.getUIIcon("save"));
     loadButton = new JButton(icons.getUIIcon("load"));
-    helpButton = new JButton(icons.getUIIcon("help"));
+    exportButton = new JButton(icons.getUIIcon("export"));
 
     navPanel.add(undoButton);
     navPanel.add(redoButton);
     navPanel.add(saveButton);
     navPanel.add(loadButton);
-    navPanel.add(helpButton);
+    navPanel.add(exportButton);
 
     posLabel = new JLabel("");
     posLabel.setFont(new Font(posLabel.getFont().getName(), posLabel.getFont().getStyle(), 20));
@@ -308,6 +308,13 @@ public class GUI {
       @Override
       public void actionPerformed(ActionEvent event) {
         mainPanel.loadFile();
+      }
+    });
+
+    exportButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        System.out.println("Export");
       }
     });
 
